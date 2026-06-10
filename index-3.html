@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Para Isabela ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0d0d;
+      --card:     #1a1a1a;
+      --card2:    #222222;
+      --border:   #2e2e2e;
+      --text:     #ffffff;
+      --sub:      #aaaaaa;
+      --accent:   #e8547a;
+      --pink:     #f472b6;
+      --purple:   #a78bfa;
+      --purple-dark: #1a0a2e;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════
+       SPLASH SCREEN
+    ══════════════════════════ */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    #splash.hide {
+      animation: splashOut .8s ease forwards;
+    }
+    @keyframes splashOut {
+      to { opacity: 0; pointer-events: none; }
+    }
+    .splash-tunnel {
+      position: absolute;
+      inset: 0;
+      perspective: 400px;
+    }
+    .tunnel-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid #00ff88;
+      border-radius: 8px;
+      box-shadow: 0 0 20px #00ff88, inset 0 0 20px rgba(0,255,136,.1);
+      animation: tunnelPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes tunnelPulse {
+      0%, 100% { opacity: .7; }
+      50%       { opacity: 1; box-shadow: 0 0 40px #00ff88, inset 0 0 30px rgba(0,255,136,.2); }
+    }
+    .splash-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      animation: splashFadeIn 1s ease .3s both;
+    }
+    @keyframes splashFadeIn {
+      from { opacity: 0; transform: scale(.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .splash-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: #00ff88;
+      text-shadow: 0 0 30px rgba(0,255,136,.6);
+      line-height: 1.1;
+    }
+    .splash-sub {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: rgba(255,255,255,.7);
+      letter-spacing: .05em;
+    }
+    .splash-btn {
+      margin-top: 32px;
+      background: transparent;
+      border: 2px solid #00ff88;
+      color: #00ff88;
+      padding: 14px 40px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: .08em;
+      transition: background .2s, color .2s, transform .2s;
+      animation: splashBtnPulse 2s ease-in-out infinite;
+    }
+    @keyframes splashBtnPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,136,.4); }
+      50%       { box-shadow: 0 0 0 12px rgba(0,255,136,0); }
+    }
+    .splash-btn:hover { background: #00ff88; color: #000; transform: scale(1.05); }
+
+    /* ══════════════════════════
+       HEADER
+    ══════════════════════════ */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+    .top-bar h1 { font-size: 1rem; font-weight: 600; letter-spacing: .02em; }
+
+    /* ══════════════════════════
+       SECTIONS / PAGE NAV
+    ══════════════════════════ */
+    .section-nav {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .section-nav::-webkit-scrollbar { display: none; }
+    .nav-pill {
+      flex-shrink: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--sub);
+      border-radius: 50px;
+      padding: 7px 16px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s, border-color .2s;
+      white-space: nowrap;
+    }
+    .nav-pill.active, .nav-pill:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .page { max-width: 480px; margin: 0 auto; padding: 0 16px 60px; }
+
+    /* ══════════════════════════
+       PHOTO CAROUSEL
+    ══════════════════════════ */
+    .carousel-wrap {
+      position: relative;
+      margin: 20px 0 0;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--card);
+      aspect-ratio: 4/3;
+    }
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+    .carousel-slide { min-width: 100%; height: 100%; position: relative; cursor: pointer; }
+    .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .carousel-slide.has-img img { display: block; }
+    .slide-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      background: var(--card2);
+      color: var(--sub);
+      font-size: .85rem;
+    }
+    .slide-placeholder span { font-size: 2.5rem; }
+    .carousel-slide.has-img .slide-placeholder { display: none; }
+    .carousel-dots {
+      position: absolute; bottom: 10px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 6px;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.35); transition: background .3s, transform .3s; cursor: pointer; }
+    .dot.active { background: #fff; transform: scale(1.3); }
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,.45); border: none; color: #fff;
+      width: 34px; height: 34px; border-radius: 50%;
+      font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; z-index: 5;
+    }
+    .carousel-btn.prev { left: 10px; }
+    .carousel-btn.next { right: 10px; }
+    .add-photo-hint { font-size: .72rem; color: var(--sub); text-align: center; margin-top: 8px; }
+
+    /* ══════════════════════════
+       MUSIC PLAYER
+    ══════════════════════════ */
+    .player-card { background: var(--card); border-radius: 16px; padding: 20px; margin-top: 16px; }
+    .song-title { font-size: 1.25rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .song-artist { font-size: .85rem; color: var(--sub); margin-top: 3px; }
+    .progress-bar-wrap { margin: 16px 0 6px; height: 4px; background: var(--border); border-radius: 4px; position: relative; cursor: pointer; }
+    .progress-bar-fill { height: 100%; background: #fff; border-radius: 4px; width: 0%; transition: width .5s linear; }
+    .progress-times { display: flex; justify-content: space-between; font-size: .7rem; color: var(--sub); }
+    .player-controls { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; }
+    .ctrl-btn { background: none; border: none; color: var(--sub); font-size: 1.3rem; cursor: pointer; padding: 4px; transition: color .2s; }
+    .ctrl-btn:hover { color: #fff; }
+    .play-btn {
+      background: #fff; color: #000; border: none;
+      width: 54px; height: 54px; border-radius: 50%;
+      font-size: 1.4rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .15s;
+    }
+    .play-btn:hover { transform: scale(1.07); }
+
+    /* ══════════════════════════
+       WRAPPED CARD
+    ══════════════════════════ */
+    .wrapped-card {
+      margin-top: 16px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(160deg, #1a0533 0%, #2d1060 50%, #0d0d2b 100%);
+      border: 1px solid rgba(167,139,250,.3);
+      padding: 24px 20px 28px;
+      text-align: center;
+      position: relative;
+    }
+    .wrapped-label {
+      display: inline-block;
+      border: 1px solid rgba(167,139,250,.5);
+      color: var(--purple);
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+    .wrapped-photo-ring {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      border: 3px solid var(--purple);
+      box-shadow: 0 0 20px rgba(167,139,250,.4);
+      background: var(--card2);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sub); font-size: .7rem; text-align: center;
+    }
+    .wrapped-photo-ring img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .wrapped-photo-ring.has-img img { display: block; }
+    .wrapped-photo-ring.has-img .ring-placeholder { display: none; }
+    .ring-placeholder { font-size: 1.8rem; }
+    .wrapped-couple-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(167,139,250,.5);
+    }
+    .wrapped-names-sub { font-size: .85rem; color: var(--purple); margin-top: 2px; }
+    .wrapped-phrase {
+      margin-top: 16px;
+      background: rgba(167,139,250,.12);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: .9rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,.85);
+    }
+    .wrapped-phrase span { color: var(--purple); font-weight: 700; }
+    .wrapped-date-box {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(167,139,250,.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+    .wrapped-date-icon { font-size: 1.4rem; }
+    .wrapped-date-info { text-align: left; }
+    .wrapped-date-label { font-size: .65rem; color: var(--purple); text-transform: uppercase; letter-spacing: .1em; font-weight: 700; }
+    .wrapped-date-val { font-size: 1rem; font-weight: 700; color: #fff; }
+    .wrapped-stars {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+    .star-dot {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--d) ease-in-out infinite;
+      opacity: 0;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(.5); }
+      50%       { opacity: .8; transform: scale(1); }
+    }
+
+    /* ══════════════════════════
+       SOBRE O CASAL
+    ══════════════════════════ */
+    .couple-card { background: var(--card); border-radius: 16px; overflow: hidden; margin-top: 16px; }
+    .couple-cover {
+      width: 100%; aspect-ratio: 16/9;
+      background: var(--card2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sub); font-size: .85rem;
+      cursor: pointer; position: relative;
+    }
+    .couple-cover img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .couple-cover.has-img img { display: block; }
+    .couple-cover .cover-placeholder { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--sub); font-size: .8rem; }
+    .couple-cover.has-img .cover-placeholder { display: none; }
+    .couple-cover span.icon { font-size: 2rem; }
+    .couple-label { font-size: .7rem; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: .1em; padding: 16px 16px 0; }
+    .couple-names { font-size: 1.4rem; font-weight: 700; padding: 6px 16px 2px; }
+    .couple-since { font-size: .85rem; color: var(--sub); padding: 0 16px 16px; }
+    .counter-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 16px 16px; }
+    .counter-cell { background: var(--card2); border-radius: 12px; padding: 14px 8px; text-align: center; }
+    .counter-num { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+    .counter-label { font-size: .7rem; color: var(--sub); margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+
+    /* ══════════════════════════
+       LINHA DO TEMPO
+    ══════════════════════════ */
+    .timeline-section {
+      margin-top: 16px;
+      background: linear-gradient(180deg, #100820 0%, #1a0d35 100%);
+      border-radius: 20px;
+      padding: 24px 16px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .timeline-title {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .timeline-subtitle {
+      text-align: center;
+      font-size: .82rem;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 100px;
+      bottom: 24px;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(244,114,182,.6), rgba(167,139,250,.3));
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 32px;
+      position: relative;
+      animation: tiFadeIn .5s ease both;
+    }
+    @keyframes tiFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .timeline-item.right { flex-direction: row-reverse; }
+    .timeline-polaroid {
+      width: 44%;
+      background: #fff;
+      border-radius: 4px;
+      padding: 6px 6px 22px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .polaroid-img-wrap {
+      width: 100%;
+      aspect-ratio: 1;
+      background: #ddd;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      color: #aaa; font-size: .75rem; text-align: center;
+    }
+    .polaroid-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .polaroid-img-wrap.has-img img { display: block; }
+    .polaroid-img-wrap.has-img .polar-hint { display: none; }
+    .polar-hint { padding: 8px; font-size: .65rem; color: #bbb; text-align: center; }
+    .timeline-dot {
+      position: absolute;
+      left: 50%; top: 0;
+      transform: translateX(-50%) translateX(0);
+      width: 12px; height: 12px;
+      background: var(--pink);
+      border-radius: 50%;
+      border: 2px solid #100820;
+      z-index: 2;
+      flex-shrink: 0;
+      margin-top: 10px;
+    }
+    .timeline-text { flex: 1; padding-top: 4px; }
+    .timeline-item.right .timeline-text { text-align: right; }
+    .ti-month {
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--pink);
+      margin-bottom: 4px;
+    }
+    .ti-desc {
+      font-size: .82rem;
+      color: rgba(255,255,255,.75);
+      line-height: 1.5;
+    }
+    .ti-add-btn {
+      margin-top: 6px;
+      background: none;
+      border: 1px dashed rgba(255,255,255,.3);
+      color: rgba(255,255,255,.4);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: .7rem;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .ti-add-btn:hover { border-color: var(--pink); color: var(--pink); }
+    .add-timeline-item-btn {
+      display: block;
+      margin: 16px auto 0;
+      background: rgba(244,114,182,.15);
+      border: 1px dashed var(--pink);
+      color: var(--pink);
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .add-timeline-item-btn:hover { background: rgba(244,114,182,.25); }
+
+    /* ══════════════════════════
+       SAUDADES
+    ══════════════════════════ */
+    .memories-section {
+      margin-top: 16px;
+      background: var(--card);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .memories-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--card2);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sub); font-size: .85rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .memories-photo img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .memories-photo.has-img img { display: block; }
+    .memories-photo.has-img .mem-placeholder { display: none; }
+    .mem-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--sub); font-size: .8rem; }
+    .mem-placeholder span { font-size: 2.5rem; }
+    .memories-body { padding: 20px; }
+    .memories-tag { font-size: .72rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
+    .memories-title { font-size: 1.3rem; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+    .memories-desc { font-size: .88rem; color: var(--sub); line-height: 1.6; }
+
+    /* ══════════════════════════
+       MENSAGEM
+    ══════════════════════════ */
+    .msg-card { background: #5bb8f5; border-radius: 16px; padding: 20px; margin-top: 16px; color: #000; }
+    .msg-label { font-size: .75rem; font-weight: 600; color: #1a5a8a; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+    .msg-preview { font-size: 1.15rem; font-weight: 700; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; color: #000; }
+    .msg-preview.expanded { display: block; -webkit-line-clamp: unset; }
+    .msg-full { font-size: 1rem; line-height: 1.7; margin-top: 12px; color: #111; display: none; }
+    .msg-full.visible { display: block; }
+    .show-msg-btn { margin-top: 16px; background: #fff; color: #000; border: none; border-radius: 50px; padding: 10px 22px; font-size: .9rem; font-weight: 600; cursor: pointer; transition: transform .15s; }
+    .show-msg-btn:hover { transform: scale(1.03); }
+    .edit-msg-wrap { margin-top: 12px; display: none; }
+    .edit-msg-wrap.visible { display: block; }
+    .edit-msg-wrap textarea { width: 100%; min-height: 120px; border-radius: 10px; border: none; padding: 12px; font-family: 'Inter', sans-serif; font-size: .95rem; resize: vertical; background: rgba(255,255,255,.85); color: #000; }
+    .edit-btns { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .save-msg-btn { background: #000; color: #fff; border: none; border-radius: 50px; padding: 8px 18px; font-size: .82rem; font-weight: 600; cursor: pointer; }
+    .cancel-msg-btn { background: rgba(0,0,0,.15); color: #000; border: none; border-radius: 50px; padding: 8px 18px; font-size: .82rem; cursor: pointer; }
+    .edit-trigger { background: none; border: none; font-size: .72rem; color: rgba(0,0,0,.45); cursor: pointer; margin-top: 8px; text-decoration: underline; }
+
+    /* ══════════════════════════
+       ROLETA
+    ══════════════════════════ */
+    .wheel-section {
+      margin-top: 16px;
+      background: #0a0a0a;
+      border-radius: 20px;
+      padding: 28px 20px 32px;
+      text-align: center;
+    }
+    .wheel-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; }
+    .wheel-sub { font-size: .82rem; color: var(--sub); margin-bottom: 28px; }
+    .wheel-container {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin: 0 auto 24px;
+    }
+    .wheel-pointer {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 20px solid #fff;
+      z-index: 10;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.5));
+    }
+    #wheelCanvas {
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(255,255,255,.1), 0 8px 40px rgba(0,0,0,.6);
+    }
+    .wheel-center-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      border: 3px solid rgba(255,255,255,.2);
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 5;
+      transition: background .2s;
+    }
+    .wheel-center-btn:hover { background: #333; }
+    .wheel-spin-btn {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 40px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s, opacity .2s;
+      min-width: 200px;
+    }
+    .wheel-spin-btn:hover:not(:disabled) { transform: scale(1.04); }
+    .wheel-spin-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .wheel-result {
+      margin-top: 16px;
+      padding: 14px 20px;
+      background: rgba(244,114,182,.12);
+      border: 1px solid rgba(244,114,182,.3);
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--pink);
+      display: none;
+    }
+    .wheel-result.show { display: block; animation: resultPop .4s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes resultPop {
+      from { transform: scale(.8); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    /* ══════════════════════════
+       FOOTER
+    ══════════════════════════ */
+    footer { text-align: center; padding: 32px 16px; font-size: .8rem; color: var(--sub); }
+    footer .big { font-size: 1.6rem; display: block; margin-bottom: 8px; }
+
+    /* ══════════════════════════
+       FLOATING HEARTS
+    ══════════════════════════ */
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.4rem;
+      z-index: 9998;
+      animation: floatUp 2.5s ease forwards;
+    }
+    @keyframes floatUp {
+      0%   { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+      100% { opacity: 0; transform: translateY(-200px) scale(1.4) rotate(20deg); }
+    }
+
+    /* ══════════════════════════
+       MODO EDITOR SECRETO
+    ══════════════════════════ */
+    /* Por padrão, esconde tudo que é edição */
+    body:not(.editor-mode) .add-photo-hint { display: none; }
+    body:not(.editor-mode) .edit-trigger { display: none; }
+    body:not(.editor-mode) .add-timeline-item-btn { display: none; }
+    body:not(.editor-mode) .ti-add-btn { display: none; }
+    body:not(.editor-mode) .carousel-slide { pointer-events: none; }
+    body:not(.editor-mode) .carousel-slide { cursor: default; }
+    body:not(.editor-mode) .carousel-btn { pointer-events: all; cursor: pointer; }
+    body:not(.editor-mode) .couple-cover { pointer-events: none; cursor: default; }
+    body:not(.editor-mode) .wrapped-photo-ring { pointer-events: none; cursor: default; }
+    body:not(.editor-mode) .memories-photo { pointer-events: none; cursor: default; }
+    body:not(.editor-mode) .timeline-polaroid { pointer-events: none; cursor: default; }
+
+    /* Banner do modo editor */
+    #editor-banner {
+      display: none;
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #f472b6, #a78bfa);
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 50px;
+      z-index: 9000;
+      box-shadow: 0 4px 20px rgba(244,114,182,.4);
+      white-space: nowrap;
+    }
+    body.editor-mode #editor-banner { display: block; }
+
+    /* ══════════════════════════
+       BOTÃO SALVAR
+    ══════════════════════════ */
+    #save-btn {
+      display: none;
+      position: fixed;
+      bottom: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #22c55e;
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 50px;
+      z-index: 9001;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(34,197,94,.4);
+      white-space: nowrap;
+      transition: transform .15s, background .2s;
+    }
+    #save-btn:hover { background: #16a34a; transform: translateX(-50%) scale(1.05); }
+    #save-btn.saved { background: #3b82f6; }
+    body.editor-mode #save-btn { display: block; }
+
+    /* BOTÃO EXPORTAR */
+    #export-btn {
+      display: none;
+      position: fixed;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #f472b6, #a78bfa);
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 50px;
+      z-index: 9001;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(244,114,182,.4);
+      white-space: nowrap;
+      transition: transform .15s;
+    }
+    #export-btn:hover { transform: translateX(-50%) scale(1.05); }
+    body.editor-mode #export-btn { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-tunnel" id="tunnelWrap"></div>
+  <div class="splash-content">
+    <div class="splash-title">Lucas & Isabela</div>
+    <div class="splash-sub">Os momentos que marcaram essa relação 💚</div>
+    <button class="splash-btn" onclick="enterSite()">Abrir presente ❤️</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="top-bar">
+  <h1>Feliz Dia dos Namorados <span>❤️</span></h1>
+</div>
+
+<!-- NAV PILLS -->
+<div class="section-nav">
+  <div class="nav-pill active" onclick="scrollTo('sec-photos')">📷 Fotos</div>
+  <div class="nav-pill" onclick="scrollTo('sec-music')">🎵 Música</div>
+  <div class="nav-pill" onclick="scrollTo('sec-wrapped')">✨ Wrapped</div>
+  <div class="nav-pill" onclick="scrollTo('sec-timeline')">📅 Linha do Tempo</div>
+  <div class="nav-pill" onclick="scrollTo('sec-memories')">🌙 Saudades</div>
+  <div class="nav-pill" onclick="scrollTo('sec-couple')">❤️ Nós</div>
+  <div class="nav-pill" onclick="scrollTo('sec-msg')">💌 Mensagem</div>
+  <div class="nav-pill" onclick="scrollTo('sec-wheel')">🎡 Roleta</div>
+</div>
+
+<div class="page">
+
+  <!-- FOTOS -->
+  <div id="sec-photos">
+    <div class="carousel-wrap" id="carouselWrap">
+      <div class="carousel-track" id="carouselTrack"></div>
+      <button class="carousel-btn prev" onclick="moveCarousel(-1)">‹</button>
+      <button class="carousel-btn next" onclick="moveCarousel(1)">›</button>
+      <div class="carousel-dots" id="carouselDots"></div>
+    </div>
+    <p class="add-photo-hint">📷 Toque em qualquer foto para trocar a imagem</p>
+  </div>
+
+  <!-- MÚSICA -->
+  <div id="sec-music" class="player-card">
+    <div class="song-title" id="songTitle">Tantos Mares</div>
+    <div class="song-artist">Pedro Valença</div>
+    <div class="progress-bar-wrap" onclick="seekMusic(event)">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-times">
+      <span id="timeNow">0:00</span>
+      <span id="timeTotal">-3:49</span>
+    </div>
+    <div class="player-controls">
+      <button class="ctrl-btn" title="Embaralhar">⇄</button>
+      <button class="ctrl-btn" title="Anterior">⏮</button>
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+      <button class="ctrl-btn" title="Próxima">⏭</button>
+      <button class="ctrl-btn" title="Repetir">↻</button>
+    </div>
+  </div>
+
+  <!-- WRAPPED -->
+  <div id="sec-wrapped" class="wrapped-card">
+    <div class="wrapped-stars" id="wrappedStars"></div>
+    <div class="wrapped-label">Wrapped do Casal</div>
+    <div class="wrapped-photo-ring" id="wrappedRing" onclick="document.getElementById('wrappedInput').click()">
+      <img id="wrappedImg" src="" alt="Foto do casal"/>
+      <div class="ring-placeholder">📸</div>
+    </div>
+    <input type="file" accept="image/*" id="wrappedInput" style="display:none" onchange="loadWrappedPhoto(event)"/>
+    <div class="wrapped-couple-name">Nossa Conexão</div>
+    <div class="wrapped-names-sub">Lucas & Isabela</div>
+    <div class="wrapped-phrase">
+      O nosso amor começou no <span>Outono</span> e já durou <span id="wrappedEstacoes">1</span> estações 🍂
+    </div>
+    <div class="wrapped-date-box">
+      <div class="wrapped-date-icon">📅</div>
+      <div class="wrapped-date-info">
+        <div class="wrapped-date-label">Data Especial</div>
+        <div class="wrapped-date-val">13 de Outubro de 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINHA DO TEMPO -->
+  <div id="sec-timeline" class="timeline-section">
+    <div class="timeline-stars" id="timelineStars"></div>
+    <div class="timeline-title">Saudades de momentos 🌙</div>
+    <div class="timeline-subtitle">Muitos momentos bons que queríamos que fossem eternos infelizmente passam, e nos restam só as lembranças ❤️</div>
+    <div class="timeline-line"></div>
+    <div id="timelineItems"></div>
+    <button class="add-timeline-item-btn" onclick="addTimelineItem()">+ Adicionar momento</button>
+  </div>
+
+  <!-- SAUDADES / MEMÓRIA GRANDE -->
+  <div id="sec-memories" class="memories-section">
+    <div class="memories-photo" id="memPhoto" onclick="document.getElementById('memInput').click()">
+      <div class="mem-placeholder"><span>📸</span>Toque para adicionar foto</div>
+      <img id="memImg" src="" alt="Memória especial"/>
+    </div>
+    <input type="file" accept="image/*" id="memInput" style="display:none" onchange="loadMemPhoto(event)"/>
+    <div class="memories-body">
+      <div class="memories-tag">Memória especial</div>
+      <div class="memories-title">Anos 80! 🌙</div>
+      <div class="memories-desc">Esse dia foi muito bom com você! No estilo anos 80 (tuts tuts tuts)</div>
+    </div>
+  </div>
+
+  <!-- SOBRE O CASAL -->
+  <div id="sec-couple" class="couple-card">
+    <div class="couple-cover" id="coupleCover" onclick="pickCoverPhoto()">
+      <img id="coverImg" src="" alt="Foto do casal"/>
+      <div class="cover-placeholder">
+        <span class="icon">📸</span>
+        Toque para adicionar foto de capa
+      </div>
+    </div>
+    <input type="file" accept="image/*" id="coverInput" style="display:none" onchange="loadCoverPhoto(event)"/>
+    <p class="couple-label">Sobre o casal</p>
+    <p class="couple-names">Lucas e Isabela</p>
+    <p class="couple-since">Juntos desde 13 de outubro de 2025</p>
+    <div class="counter-grid">
+      <div class="counter-cell"><div class="counter-num" id="cAnos">0</div><div class="counter-label">Anos</div></div>
+      <div class="counter-cell"><div class="counter-num" id="cMeses">0</div><div class="counter-label">Meses</div></div>
+      <div class="counter-cell"><div class="counter-num" id="cDias">0</div><div class="counter-label">Dias</div></div>
+      <div class="counter-cell"><div class="counter-num" id="cHoras">0</div><div class="counter-label">Horas</div></div>
+      <div class="counter-cell"><div class="counter-num" id="cMinutos">0</div><div class="counter-label">Minutos</div></div>
+      <div class="counter-cell"><div class="counter-num" id="cSegundos">0</div><div class="counter-label">Segundos</div></div>
+    </div>
+  </div>
+
+  <!-- MENSAGEM -->
+  <div id="sec-msg" class="msg-card">
+    <p class="msg-label">Mensagem especial</p>
+    <p class="msg-preview" id="msgPreview">Isabela, desde o primeiro dia que você entrou na minha vida tudo ficou mais bonito...</p>
+    <div class="msg-full" id="msgFull">
+      Isabela, desde o primeiro dia que você entrou na minha vida tudo ficou mais bonito. Cada sorriso seu é o meu lugar favorito no mundo. Obrigado por cada momento, cada risada e cada abraço. Te amo de um jeito que só cresce.
+    </div>
+    <button class="show-msg-btn" id="showMsgBtn" onclick="toggleMsg()">Mostrar Mensagem</button>
+    <button class="edit-trigger" onclick="startEditMsg()">✏️ editar mensagem</button>
+    <div class="edit-msg-wrap" id="editMsgWrap">
+      <textarea id="editMsgArea"></textarea>
+      <div class="edit-btns">
+        <button class="save-msg-btn" onclick="saveMsg()">Salvar</button>
+        <button class="cancel-msg-btn" onclick="cancelEditMsg()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROLETA -->
+  <div id="sec-wheel" class="wheel-section">
+    <div class="wheel-title">Para onde vamos sair Hoje? 🎡</div>
+    <div class="wheel-sub">Gire a roleta e deixe o destino decidir!</div>
+    <div class="wheel-container">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheelCanvas" width="260" height="260"></canvas>
+      <button class="wheel-center-btn" id="wheelCenterBtn" onclick="spinWheel()">▶</button>
+    </div>
+    <button class="wheel-spin-btn" id="wheelSpinBtn" onclick="spinWheel()">🎲 Girar Roleta</button>
+    <div class="wheel-result" id="wheelResult"></div>
+  </div>
+
+</div>
+
+
+<button id="export-btn" onclick="exportSite()">📦 Exportar Site Final</button>
+<button id="save-btn" onclick="saveAllChanges()">💾 Salvar Alterações</button>
+<div id="editor-banner">✏️ Modo Editor Ativo — Adicione as fotos e textos!</div>
+
+<footer>
+  <span class="big">❤️</span>
+  Feito com todo o amor do mundo, para você, Isabela.
+</footer>
+
+<script>
+/* ══════════════════════════
+   SPLASH
+══════════════════════════ */
+(function buildTunnel() {
+  const wrap = document.getElementById('tunnelWrap');
+  const sizes = [320,280,240,200,160,120,80,40];
+  sizes.forEach((s,i) => {
+    const el = document.createElement('div');
+    el.className = 'tunnel-ring';
+    el.style.cssText = `width:${s}px;height:${s*1.8}px;animation-delay:${i*0.15}s`;
+    wrap.appendChild(el);
+  });
+})();
+
+function enterSite() {
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(() => document.getElementById('splash').style.display = 'none', 900);
+  spawnHearts();
+}
+
+function spawnHearts() {
+  for (let i = 0; i < 10; i++) {
+    setTimeout(() => {
+      const h = document.createElement('div');
+      h.className = 'floating-heart';
+      h.textContent = ['❤️','💖','💕','💗'][Math.floor(Math.random()*4)];
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.bottom = '20px';
+      h.style.animationDuration = (2 + Math.random()) + 's';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 3000);
+    }, i * 200);
+  }
+}
+
+/* ══════════════════════════
+   NAV PILLS SCROLL
+══════════════════════════ */
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+/* ══════════════════════════
+   CARROSSEL DE FOTOS
+══════════════════════════ */
+const NUM_SLIDES = 6;
+const track = document.getElementById('carouselTrack');
+const dotsWrap = document.getElementById('carouselDots');
+let currentSlide = 0;
+let autoSlideTimer;
+
+for (let i = 0; i < NUM_SLIDES; i++) {
+  const slide = document.createElement('div');
+  slide.className = 'carousel-slide';
+  slide.id = `slide-${i}`;
+  slide.innerHTML = `
+    <div class="slide-placeholder"><span>📷</span>Toque para adicionar foto</div>
+    <img id="simg-${i}" src="" alt="Foto ${i+1}"/>
+    <input type="file" accept="image/*" id="sinput-${i}" style="display:none"/>
+  `;
+  slide.addEventListener('click', () => document.getElementById(`sinput-${i}`).click());
+  track.appendChild(slide);
+  slide.querySelector(`#sinput-${i}`).addEventListener('change', function() {
+    const file = this.files[0]; if (!file) return;
+    const r = new FileReader();
+    r.onload = e => {
+      document.getElementById(`simg-${i}`).src = e.target.result;
+      document.getElementById(`slide-${i}`).classList.add('has-img');
+    };
+    r.readAsDataURL(file);
+  });
+  const dot = document.createElement('div');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', () => goToSlide(i));
+  dotsWrap.appendChild(dot);
+}
+
+function goToSlide(n) {
+  currentSlide = (n + NUM_SLIDES) % NUM_SLIDES;
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === currentSlide));
+}
+function moveCarousel(dir) { goToSlide(currentSlide + dir); resetAutoSlide(); }
+function resetAutoSlide() {
+  clearInterval(autoSlideTimer);
+  autoSlideTimer = setInterval(() => moveCarousel(1), 4000);
+}
+resetAutoSlide();
+
+/* ══════════════════════════
+   FOTO DE CAPA
+══════════════════════════ */
+function pickCoverPhoto() { document.getElementById('coverInput').click(); }
+function loadCoverPhoto(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    document.getElementById('coverImg').src = ev.target.result;
+    document.getElementById('coupleCover').classList.add('has-img');
+  };
+  r.readAsDataURL(file);
+}
+function loadWrappedPhoto(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    document.getElementById('wrappedImg').src = ev.target.result;
+    document.getElementById('wrappedRing').classList.add('has-img');
+  };
+  r.readAsDataURL(file);
+}
+function loadMemPhoto(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    document.getElementById('memImg').src = ev.target.result;
+    document.getElementById('memPhoto').classList.add('has-img');
+  };
+  r.readAsDataURL(file);
+}
+
+/* ══════════════════════════
+   PLAYER REAL
+══════════════════════════ */
+const audio = new Audio('https://archive.org/download/pedro-valenc-a-e-gabriela-stehling-tantos-mares-video-oficial-mp-3-160-k/PEDRO%20VALEN%C3%87A%20%20E%20GABRIELA%20STEHLING%20-%20Tantos%20Mares%20%28V%C3%ADdeo%20Oficial%29%28MP3_160K%29.mp3');
+audio.crossOrigin = 'anonymous';
+
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('timeNow').textContent = fmt(audio.currentTime);
+  document.getElementById('timeTotal').textContent = '-' + fmt(audio.duration - audio.currentTime);
+});
+audio.addEventListener('loadedmetadata', () => {
+  document.getElementById('timeTotal').textContent = '-' + fmt(audio.duration);
+});
+audio.addEventListener('ended', () => {
+  document.getElementById('playBtn').textContent = '▶';
+});
+
+function togglePlay() {
+  if (audio.paused) {
+    audio.play().catch(() => {});
+    document.getElementById('playBtn').textContent = '⏸';
+  } else {
+    audio.pause();
+    document.getElementById('playBtn').textContent = '▶';
+  }
+}
+function seekMusic(e) {
+  if (!audio.duration) return;
+  audio.currentTime = (e.offsetX / e.currentTarget.offsetWidth) * audio.duration;
+}
+function fmt(s) {
+  s = Math.floor(s || 0);
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+
+/* ══════════════════════════
+   CONTADOR
+══════════════════════════ */
+const START = new Date('2025-10-13T00:00:00');
+function updateCounter() {
+  const now = new Date();
+  let y = now.getFullYear() - START.getFullYear();
+  let m = now.getMonth() - START.getMonth();
+  let d = now.getDate() - START.getDate();
+  if (d < 0) { m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+  if (m < 0) { y--; m += 12; }
+  document.getElementById('cAnos').textContent    = y;
+  document.getElementById('cMeses').textContent   = m;
+  document.getElementById('cDias').textContent    = d;
+  document.getElementById('cHoras').textContent   = now.getHours();
+  document.getElementById('cMinutos').textContent = now.getMinutes();
+  document.getElementById('cSegundos').textContent= now.getSeconds();
+  // wrapped estações
+  const totalMonths = y * 12 + m;
+  document.getElementById('wrappedEstacoes').textContent = Math.max(1, Math.floor(totalMonths / 3));
+}
+updateCounter();
+setInterval(updateCounter, 1000);
+
+/* ══════════════════════════
+   WRAPPED STARS
+══════════════════════════ */
+(function() {
+  const wrap = document.getElementById('wrappedStars');
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-dot';
+    const size = Math.random() * 3 + 1;
+    s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(2+Math.random()*3).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s`;
+    wrap.appendChild(s);
+  }
+})();
+
+/* ══════════════════════════
+   LINHA DO TEMPO
+══════════════════════════ */
+const timelineData = [
+  { month: 'Outubro 2025', desc: '💛 Nosso primeiro encontro', side: 'left' },
+  { month: 'Outubro 2025', desc: '💍 Quando te pedi em namoro', side: 'right' },
+  { month: 'Novembro 2025', desc: '🌙 Noite especial juntos', side: 'left' },
+  { month: 'Dezembro 2025', desc: '🍕 Quando fomos para a Pizzaria com sua família', side: 'right' },
+  { month: 'Janeiro 2026', desc: '🏠 Dia em que você veio para morar', side: 'left' },
+];
+let timelineCount = timelineData.length;
+
+function renderTimeline() {
+  const container = document.getElementById('timelineItems');
+  container.innerHTML = '';
+  timelineData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = `timeline-item ${item.side}`;
+    div.style.animationDelay = (i * 0.1) + 's';
+    div.innerHTML = `
+      <div class="timeline-polaroid" onclick="triggerPolaroidPhoto(${i})">
+        <div class="polaroid-img-wrap" id="polarWrap-${i}">
+          <img id="polarImg-${i}" src="${item.img||''}" alt=""/>
+          <div class="polar-hint">📷<br>Toque para<br>adicionar foto</div>
+        </div>
+        <input type="file" accept="image/*" id="polarInput-${i}" style="display:none"/>
+      </div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-text">
+        <div class="ti-month">${item.month}</div>
+        <div class="ti-desc">${item.desc}</div>
+      </div>
+    `;
+    container.appendChild(div);
+    if (item.img) {
+      document.getElementById(`polarWrap-${i}`).classList.add('has-img');
+    }
+    document.getElementById(`polarInput-${i}`).addEventListener('change', function() {
+      const file = this.files[0]; if (!file) return;
+      const r = new FileReader();
+      r.onload = ev => {
+        timelineData[i].img = ev.target.result;
+        document.getElementById(`polarImg-${i}`).src = ev.target.result;
+        document.getElementById(`polarWrap-${i}`).classList.add('has-img');
+      };
+      r.readAsDataURL(file);
+    });
+  });
+}
+renderTimeline();
+
+function triggerPolaroidPhoto(i) {
+  document.getElementById(`polarInput-${i}`).click();
+}
+
+function addTimelineItem() {
+  const month = prompt('Mês e ano do momento (ex: Março 2026):');
+  if (!month) return;
+  const desc = prompt('Descreva o momento:');
+  if (!desc) return;
+  timelineData.push({ month, desc, side: timelineData.length % 2 === 0 ? 'left' : 'right' });
+  renderTimeline();
+}
+
+/* ══════════════════════════
+   MENSAGEM
+══════════════════════════ */
+let msgShown = false;
+function toggleMsg() {
+  msgShown = !msgShown;
+  document.getElementById('msgFull').classList.toggle('visible', msgShown);
+  document.getElementById('msgPreview').classList.toggle('expanded', msgShown);
+  document.getElementById('showMsgBtn').textContent = msgShown ? 'Esconder Mensagem' : 'Mostrar Mensagem';
+}
+function startEditMsg() {
+  document.getElementById('editMsgArea').value = document.getElementById('msgFull').textContent.trim();
+  document.getElementById('editMsgWrap').classList.add('visible');
+}
+function saveMsg() {
+  const val = document.getElementById('editMsgArea').value.trim();
+  if (!val) return;
+  document.getElementById('msgPreview').textContent = val.length > 80 ? val.slice(0,80) + '...' : val;
+  document.getElementById('msgFull').textContent = val;
+  document.getElementById('editMsgWrap').classList.remove('visible');
+}
+function cancelEditMsg() { document.getElementById('editMsgWrap').classList.remove('visible'); }
+
+/* ══════════════════════════
+   ROLETA
+══════════════════════════ */
+const WHEEL_OPTIONS = ['Pizzaria 🍕','Hamburgueria 🍔','Burritos 🌯','Parque 🌳','Açaí 🍇'];
+const WHEEL_COLORS = ['#f472b6','#c084fc','#fb7185','#a78bfa','#f9a8d4'];
+const canvas = document.getElementById('wheelCanvas');
+const ctx = canvas.getContext('2d');
+let wheelAngle = 0;
+let spinning = false;
+
+function drawWheel(angle) {
+  const cx = canvas.width / 2, cy = canvas.height / 2, r = cx - 4;
+  const slice = (Math.PI * 2) / WHEEL_OPTIONS.length;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  WHEEL_OPTIONS.forEach((opt, i) => {
+    const start = angle + i * slice;
+    const end = start + slice;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, end);
+    ctx.closePath();
+    ctx.fillStyle = WHEEL_COLORS[i];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // text
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(start + slice / 2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.shadowColor = 'rgba(0,0,0,.4)';
+    ctx.shadowBlur = 3;
+    ctx.fillText(opt, r - 10, 4);
+    ctx.restore();
+  });
+  // center circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+  ctx.fillStyle = '#111';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.2)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+}
+drawWheel(0);
+
+function spinWheel() {
+  if (spinning) return;
+  spinning = true;
+  document.getElementById('wheelSpinBtn').disabled = true;
+  document.getElementById('wheelSpinBtn').textContent = '⏳ Girando...';
+  document.getElementById('wheelResult').classList.remove('show');
+
+  const extraSpins = (5 + Math.floor(Math.random() * 5)) * Math.PI * 2;
+  const stopAngle  = Math.random() * Math.PI * 2;
+  const totalAngle = extraSpins + stopAngle;
+  const duration   = 4000;
+  const start      = performance.now();
+  const startAngle = wheelAngle;
+
+  function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+
+  function animate(now) {
+    const elapsed = now - start;
+    const t = Math.min(elapsed / duration, 1);
+    wheelAngle = startAngle + totalAngle * easeOut(t);
+    drawWheel(wheelAngle);
+    if (t < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      wheelAngle = startAngle + totalAngle;
+      drawWheel(wheelAngle);
+      spinning = false;
+      document.getElementById('wheelSpinBtn').disabled = false;
+      document.getElementById('wheelSpinBtn').textContent = '🎲 Girar Roleta';
+      // determine winner — ponteiro está no topo (−π/2), calcular qual fatia está lá
+      const slice = (Math.PI * 2) / WHEEL_OPTIONS.length;
+      const normalized = (((Math.PI / 2 - wheelAngle) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      const winnerIndex = Math.floor(normalized / slice) % WHEEL_OPTIONS.length;
+      const winner = WHEEL_OPTIONS[winnerIndex];
+      const resultEl = document.getElementById('wheelResult');
+      resultEl.innerHTML = `🎉 Resultado: <strong>${winner}</strong><br><span style="font-size:.8rem;font-weight:400;color:rgba(255,255,255,.6)">Então é isso! Vamos para ${winner.replace(/[^a-zA-ZÀ-ÿ\s]/g,'').trim()}!</span>`;
+      resultEl.classList.add('show');
+      spawnHearts();
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+/* ══════════════════════════
+   MODO EDITOR SECRETO
+   Acesse: index.html#editor
+══════════════════════════ */
+const STORE_KEY = 'isabela_site_data';
+
+function saveAllChanges() {
+  const data = {};
+
+  // Fotos do carrossel
+  data.slides = [];
+  for (let i = 0; i < NUM_SLIDES; i++) {
+    const img = document.getElementById('simg-' + i);
+    data.slides.push(img && img.src && img.src.startsWith('data:') ? img.src : null);
+  }
+
+  // Foto de capa
+  const coverImg = document.getElementById('coverImg');
+  data.coverImg = coverImg && coverImg.src.startsWith('data:') ? coverImg.src : null;
+
+  // Foto wrapped
+  const wrappedImg = document.getElementById('wrappedImg');
+  data.wrappedImg = wrappedImg && wrappedImg.src.startsWith('data:') ? wrappedImg.src : null;
+
+  // Foto memória
+  const memImg = document.getElementById('memImg');
+  data.memImg = memImg && memImg.src.startsWith('data:') ? memImg.src : null;
+
+  // Fotos da linha do tempo
+  data.timelineImgs = timelineData.map(item => item.img || null);
+
+  // Mensagem
+  data.msgFull = document.getElementById('msgFull').textContent.trim();
+  data.msgPreview = document.getElementById('msgPreview').textContent.trim();
+
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+    const btn = document.getElementById('save-btn');
+    btn.textContent = '✅ Salvo!';
+    btn.classList.add('saved');
+    setTimeout(() => {
+      btn.textContent = '💾 Salvar Alterações';
+      btn.classList.remove('saved');
+    }, 2500);
+  } catch(e) {
+    alert('Erro ao salvar. As fotos podem ser grandes demais. Tente com fotos menores.');
+  }
+}
+
+function loadSavedData() {
+  let data;
+  try { data = JSON.parse(localStorage.getItem(STORE_KEY)); } catch(e) {}
+  if (!data) return;
+
+  // Carrossel
+  if (data.slides) {
+    data.slides.forEach((src, i) => {
+      if (!src) return;
+      const img = document.getElementById('simg-' + i);
+      if (img) { img.src = src; document.getElementById('slide-' + i).classList.add('has-img'); }
+    });
+  }
+
+  // Capa
+  if (data.coverImg) {
+    document.getElementById('coverImg').src = data.coverImg;
+    document.getElementById('coupleCover').classList.add('has-img');
+  }
+
+  // Wrapped
+  if (data.wrappedImg) {
+    document.getElementById('wrappedImg').src = data.wrappedImg;
+    document.getElementById('wrappedRing').classList.add('has-img');
+  }
+
+  // Memória
+  if (data.memImg) {
+    document.getElementById('memImg').src = data.memImg;
+    document.getElementById('memPhoto').classList.add('has-img');
+  }
+
+  // Linha do tempo
+  if (data.timelineImgs) {
+    data.timelineImgs.forEach((src, i) => {
+      if (!src || !timelineData[i]) return;
+      timelineData[i].img = src;
+    });
+    renderTimeline();
+  }
+
+  // Mensagem
+  if (data.msgFull) {
+    document.getElementById('msgFull').textContent = data.msgFull;
+    document.getElementById('msgPreview').textContent = data.msgPreview || data.msgFull.slice(0, 80) + '...';
+  }
+}
+
+// Carregar dados salvos ao abrir a página
+loadSavedData();
+
+// Ativar modo editor se #editor na URL
+(function() {
+  if (window.location.hash === '#editor') {
+    document.body.classList.add('editor-mode');
+  }
+})();
+
+/* ══════════════════════════
+   EXPORTAR SITE FINAL
+══════════════════════════ */
+function exportSite() {
+  const btn = document.getElementById('export-btn');
+  btn.textContent = '⏳ Gerando...';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    try {
+      // Pegar o HTML atual da página
+      let finalHtml = document.documentElement.outerHTML;
+
+      // Embutir todas as fotos do carrossel
+      for (let i = 0; i < NUM_SLIDES; i++) {
+        const img = document.getElementById('simg-' + i);
+        if (img && img.src && img.src.startsWith('data:')) {
+          // Substituir src vazio pela imagem em base64
+          finalHtml = finalHtml.replace(
+            new RegExp(`id="simg-${i}" src="[^"]*"`, 'g'),
+            `id="simg-${i}" src="${img.src}"`
+          );
+          // Garantir que o slide tem a classe has-img
+          finalHtml = finalHtml.replace(
+            new RegExp(`id="slide-${i}" class="carousel-slide"`, 'g'),
+            `id="slide-${i}" class="carousel-slide has-img"`
+          );
+        }
+      }
+
+      // Foto de capa
+      const coverImg = document.getElementById('coverImg');
+      if (coverImg && coverImg.src.startsWith('data:')) {
+        finalHtml = finalHtml.replace(
+          /id="coverImg" src="[^"]*"/g,
+          `id="coverImg" src="${coverImg.src}"`
+        );
+        finalHtml = finalHtml.replace(
+          /id="coupleCover" class="couple-cover"/g,
+          `id="coupleCover" class="couple-cover has-img"`
+        );
+      }
+
+      // Foto wrapped
+      const wrappedImg = document.getElementById('wrappedImg');
+      if (wrappedImg && wrappedImg.src.startsWith('data:')) {
+        finalHtml = finalHtml.replace(
+          /id="wrappedImg" src="[^"]*"/g,
+          `id="wrappedImg" src="${wrappedImg.src}"`
+        );
+        finalHtml = finalHtml.replace(
+          /id="wrappedRing" class="wrapped-photo-ring"/g,
+          `id="wrappedRing" class="wrapped-photo-ring has-img"`
+        );
+      }
+
+      // Foto memória
+      const memImg = document.getElementById('memImg');
+      if (memImg && memImg.src.startsWith('data:')) {
+        finalHtml = finalHtml.replace(
+          /id="memImg" src="[^"]*"/g,
+          `id="memImg" src="${memImg.src}"`
+        );
+        finalHtml = finalHtml.replace(
+          /id="memPhoto" class="memories-photo"/g,
+          `id="memPhoto" class="memories-photo has-img"`
+        );
+      }
+
+      // Fotos da linha do tempo — embutir no timelineData
+      const timelineJson = JSON.stringify(timelineData);
+      finalHtml = finalHtml.replace(
+        /const timelineData = \[[\s\S]*?\];/,
+        `const timelineData = ${timelineJson};`
+      );
+
+      // Mensagem
+      const msgFull = document.getElementById('msgFull').textContent.trim();
+      const msgPreview = document.getElementById('msgPreview').textContent.trim();
+      finalHtml = finalHtml.replace(
+        /(<p class="msg-preview" id="msgPreview">)[^<]*/,
+        `$1${msgPreview}`
+      );
+      finalHtml = finalHtml.replace(
+        /(<div class="msg-full" id="msgFull">)[^<]*/,
+        `$1${msgFull}`
+      );
+
+      // Remover hash #editor da URL embutida (se houver)
+      finalHtml = finalHtml.replace(/window\.location\.hash === '#editor'/, 'false');
+
+      // Download
+      const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'para-isabela.html';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      btn.textContent = '✅ Baixado!';
+      setTimeout(() => {
+        btn.textContent = '📦 Exportar Site Final';
+        btn.disabled = false;
+      }, 3000);
+    } catch(e) {
+      alert('Erro ao exportar: ' + e.message);
+      btn.textContent = '📦 Exportar Site Final';
+      btn.disabled = false;
+    }
+  }, 100);
+}
+
+</script>
+</body>
+</html>
